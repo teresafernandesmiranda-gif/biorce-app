@@ -1,4 +1,16 @@
 exports.handler = async function(event) {
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS'
+      },
+      body: ''
+    };
+  }
+
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method not allowed' };
   }
@@ -20,8 +32,16 @@ exports.handler = async function(event) {
     });
 
     const data = await response.json();
-    return { statusCode: response.status, body: JSON.stringify(data) };
+    return {
+      statusCode: response.status,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify(data)
+    };
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    return {
+      statusCode: 500,
+      headers: { 'Access-Control-Allow-Origin': '*' },
+      body: JSON.stringify({ error: err.message })
+    };
   }
 };
