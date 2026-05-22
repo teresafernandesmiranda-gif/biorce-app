@@ -296,7 +296,7 @@ RULES:
 - Start with [PERSONALISED] if you found recent context, or [ROLE-BASED] if not
 - Write only the script, nothing else`;
 
-  const res = await fetch('/api/generate', {
+  const res = await fetch('/.netlify/functions/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
