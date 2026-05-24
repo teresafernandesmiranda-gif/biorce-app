@@ -1,5 +1,5 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -296,14 +296,13 @@ RULES:
 - Start with [PERSONALISED] if you found recent context, or [ROLE-BASED] if not
 - Write only the script, nothing else`;
 
-  const res = await fetch('/.netlify/functions/generate', {
+  const apiKey = localStorage.getItem('anthropic_key');
+  if (!apiKey) { openKeyModal(); throw new Error('No API key'); }
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-5-20251001',
-      max_tokens: 1000,
-      messages: [{ role: 'user', content: prompt }]
-    })
+    headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    body: JSON.stringify({ model: 'claude-sonnet-4-5-20251001', max_tokens: 1000, messages: [{ role: 'user', content: prompt }] })
   });
 
   if (!res.ok) {
