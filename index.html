@@ -143,6 +143,18 @@
   </div>
 </main>
 
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h3>Anthropic API key</h3>
+    <p>Your key is stored locally in your browser. Get yours at <strong>console.anthropic.com</strong>.</p>
+    <input type="password" id="modal-key-input" placeholder="sk-ant-..." />
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeKeyModal()">Cancel</button>
+      <button class="btn btn-dark" onclick="saveKey()">Save key</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let leads = [];
 let scripts = [];
@@ -367,6 +379,18 @@ function resetApp() {
 
 function show(id) { document.getElementById(id).style.display = 'block'; }
 function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+function openKeyModal() {
+  document.getElementById('modal-key-input').value = localStorage.getItem('anthropic_key') || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeKeyModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function saveKey() {
+  const val = document.getElementById('modal-key-input').value.trim();
+  if (!val.startsWith('sk-ant-')) { alert('Invalid key'); return; }
+  localStorage.setItem('anthropic_key', val);
+  closeKeyModal();
+}
 
 init();
 </script>
